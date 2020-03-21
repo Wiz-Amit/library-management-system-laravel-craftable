@@ -29,9 +29,9 @@ class StoreBook extends FormRequest
             'title' => ['required', 'string'],
             'author' => ['required', 'string'],
             'price' => ['nullable', 'numeric'],
+            'count' => ['required', 'string'],
             'rack_no' => ['nullable', 'string'],
             'edition' => ['nullable', 'string'],
-            'count' => ['required', 'string'],
             
         ];
     }

@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Admin\Book;
+namespace App\Http\Requests\Admin\Transaction;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 
-class UpdateBook extends FormRequest
+class StoreTransaction extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -15,7 +15,7 @@ class UpdateBook extends FormRequest
      */
     public function authorize(): bool
     {
-        return Gate::allows('admin.book.edit', $this->book);
+        return Gate::allows('admin.transaction.create');
     }
 
     /**
@@ -26,25 +26,22 @@ class UpdateBook extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['sometimes', 'string'],
-            'author' => ['sometimes', 'string'],
-            'price' => ['nullable', 'numeric'],
-            'count' => ['sometimes', 'string'],
-            'rack_no' => ['nullable', 'string'],
-            'edition' => ['nullable', 'string'],
+            'book_id' => ['required', 'string'],
+            'member_id' => ['required', 'string'],
+            'admin_user_id' => ['required', 'string'],
+            'expiry' => ['required', 'date'],
             
         ];
     }
 
     /**
-     * Modify input data
-     *
-     * @return array
-     */
+    * Modify input data
+    *
+    * @return array
+    */
     public function getSanitized(): array
     {
         $sanitized = $this->validated();
-
 
         //Add your code for manipulation with request data here
 

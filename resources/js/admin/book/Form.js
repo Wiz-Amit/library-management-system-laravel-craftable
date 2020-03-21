@@ -8,9 +8,9 @@ Vue.component('book-form', {
                 title:  '' ,
                 author:  '' ,
                 price:  '' ,
+                count:  '' ,
                 rack_no:  '' ,
                 edition:  '' ,
-                count:  '' ,
                 
             }
         }

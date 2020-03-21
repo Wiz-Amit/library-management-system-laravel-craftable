@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\Book\BulkDestroyBook;
-use App\Http\Requests\Admin\Book\DestroyBook;
-use App\Http\Requests\Admin\Book\IndexBook;
-use App\Http\Requests\Admin\Book\StoreBook;
-use App\Http\Requests\Admin\Book\UpdateBook;
-use App\Models\Book;
+use App\Http\Requests\Admin\Member\BulkDestroyMember;
+use App\Http\Requests\Admin\Member\DestroyMember;
+use App\Http\Requests\Admin\Member\IndexMember;
+use App\Http\Requests\Admin\Member\StoreMember;
+use App\Http\Requests\Admin\Member\UpdateMember;
+use App\Models\Member;
 use Brackets\AdminListing\Facades\AdminListing;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -20,27 +20,27 @@ use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
-class BooksController extends Controller
+class MembersController extends Controller
 {
 
     /**
      * Display a listing of the resource.
      *
-     * @param IndexBook $request
+     * @param IndexMember $request
      * @return array|Factory|View
      */
-    public function index(IndexBook $request)
+    public function index(IndexMember $request)
     {
         // create and AdminListing instance for a specific model and
-        $data = AdminListing::create(Book::class)->processRequestAndGet(
+        $data = AdminListing::create(Member::class)->processRequestAndGet(
             // pass the request with params
             $request,
 
             // set columns to query
-            ['id', 'title', 'author', 'price', 'count', 'rack_no', 'edition'],
+            ['id', 'type', 'name', 'phone', 'email', 'address_l1', 'address_l2', 'expiry'],
 
             // set columns to searchIn
-            ['id', 'title', 'author']
+            ['id', 'type', 'name', 'phone', 'email', 'address_l1', 'address_l2']
         );
 
         if ($request->ajax()) {
@@ -52,7 +52,7 @@ class BooksController extends Controller
             return ['data' => $data];
         }
 
-        return view('admin.book.index', ['data' => $data]);
+        return view('admin.member.index', ['data' => $data]);
     }
 
     /**
@@ -63,42 +63,42 @@ class BooksController extends Controller
      */
     public function create()
     {
-        $this->authorize('admin.book.create');
+        $this->authorize('admin.member.create');
 
-        return view('admin.book.create');
+        return view('admin.member.create');
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param StoreBook $request
+     * @param StoreMember $request
      * @return array|RedirectResponse|Redirector
      */
-    public function store(StoreBook $request)
+    public function store(StoreMember $request)
     {
         // Sanitize input
         $sanitized = $request->getSanitized();
 
-        // Store the Book
-        $book = Book::create($sanitized);
+        // Store the Member
+        $member = Member::create($sanitized);
 
         if ($request->ajax()) {
-            return ['redirect' => url('admin/books'), 'message' => trans('brackets/admin-ui::admin.operation.succeeded')];
+            return ['redirect' => url('admin/members'), 'message' => trans('brackets/admin-ui::admin.operation.succeeded')];
         }
 
-        return redirect('admin/books');
+        return redirect('admin/members');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param Book $book
+     * @param Member $member
      * @throws AuthorizationException
      * @return void
      */
-    public function show(Book $book)
+    public function show(Member $member)
     {
-        $this->authorize('admin.book.show', $book);
+        $this->authorize('admin.member.show', $member);
 
         // TODO your code goes here
     }
@@ -106,56 +106,56 @@ class BooksController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param Book $book
+     * @param Member $member
      * @throws AuthorizationException
      * @return Factory|View
      */
-    public function edit(Book $book)
+    public function edit(Member $member)
     {
-        $this->authorize('admin.book.edit', $book);
+        $this->authorize('admin.member.edit', $member);
 
 
-        return view('admin.book.edit', [
-            'book' => $book,
+        return view('admin.member.edit', [
+            'member' => $member,
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param UpdateBook $request
-     * @param Book $book
+     * @param UpdateMember $request
+     * @param Member $member
      * @return array|RedirectResponse|Redirector
      */
-    public function update(UpdateBook $request, Book $book)
+    public function update(UpdateMember $request, Member $member)
     {
         // Sanitize input
         $sanitized = $request->getSanitized();
 
-        // Update changed values Book
-        $book->update($sanitized);
+        // Update changed values Member
+        $member->update($sanitized);
 
         if ($request->ajax()) {
             return [
-                'redirect' => url('admin/books'),
+                'redirect' => url('admin/members'),
                 'message' => trans('brackets/admin-ui::admin.operation.succeeded'),
             ];
         }
 
-        return redirect('admin/books');
+        return redirect('admin/members');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param DestroyBook $request
-     * @param Book $book
+     * @param DestroyMember $request
+     * @param Member $member
      * @throws Exception
      * @return ResponseFactory|RedirectResponse|Response
      */
-    public function destroy(DestroyBook $request, Book $book)
+    public function destroy(DestroyMember $request, Member $member)
     {
-        $book->delete();
+        $member->delete();
 
         if ($request->ajax()) {
             return response(['message' => trans('brackets/admin-ui::admin.operation.succeeded')]);
@@ -167,17 +167,17 @@ class BooksController extends Controller
     /**
      * Remove the specified resources from storage.
      *
-     * @param BulkDestroyBook $request
+     * @param BulkDestroyMember $request
      * @throws Exception
      * @return Response|bool
      */
-    public function bulkDestroy(BulkDestroyBook $request) : Response
+    public function bulkDestroy(BulkDestroyMember $request) : Response
     {
         DB::transaction(static function () use ($request) {
             collect($request->data['ids'])
                 ->chunk(1000)
                 ->each(static function ($bulkChunk) {
-                    Book::whereIn('id', $bulkChunk)->delete();
+                    Member::whereIn('id', $bulkChunk)->delete();
 
                     // TODO your code goes here
                 });

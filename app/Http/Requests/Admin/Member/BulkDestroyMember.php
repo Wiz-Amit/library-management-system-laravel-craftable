@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Admin\Book;
+namespace App\Http\Requests\Admin\Member;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 
-class IndexBook extends FormRequest
+class BulkDestroyMember extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -14,8 +14,7 @@ class IndexBook extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
-        return Gate::allows('admin.book.index');
+        return Gate::allows('admin.member.bulk-delete');
     }
 
     /**
@@ -26,12 +25,7 @@ class IndexBook extends FormRequest
     public function rules(): array
     {
         return [
-            'orderBy' => 'in:id,title,author,price,count,rack_no,edition|nullable',
-            'orderDirection' => 'in:asc,desc|nullable',
-            'search' => 'string|nullable',
-            'page' => 'integer|nullable',
-            'per_page' => 'integer|nullable',
-
+            'ids.*' => 'integer'
         ];
     }
 }

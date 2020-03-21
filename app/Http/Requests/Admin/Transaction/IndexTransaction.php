@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Admin\Book;
+namespace App\Http\Requests\Admin\Transaction;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 
-class IndexBook extends FormRequest
+class IndexTransaction extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -14,8 +14,7 @@ class IndexBook extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
-        return Gate::allows('admin.book.index');
+        return Gate::allows('admin.transaction.index');
     }
 
     /**
@@ -26,7 +25,7 @@ class IndexBook extends FormRequest
     public function rules(): array
     {
         return [
-            'orderBy' => 'in:id,title,author,price,count,rack_no,edition|nullable',
+            'orderBy' => 'in:id,book_id,member_id,admin_user_id,expiry|nullable',
             'orderDirection' => 'in:asc,desc|nullable',
             'search' => 'string|nullable',
             'page' => 'integer|nullable',

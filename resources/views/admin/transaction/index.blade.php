@@ -1,20 +1,20 @@
 @extends('brackets/admin-ui::admin.layout.default')
 
-@section('title', trans('admin.book.actions.index'))
+@section('title', trans('admin.transaction.actions.index'))
 
 @section('body')
 
-    <book-listing
+    <transaction-listing
         :data="{{ $data->toJson() }}"
-        :url="'{{ url('admin/books') }}'"
+        :url="'{{ url('admin/transactions') }}'"
         inline-template>
 
         <div class="row">
             <div class="col">
                 <div class="card">
                     <div class="card-header">
-                        <i class="fa fa-align-justify"></i> {{ trans('admin.book.actions.index') }}
-                        <a class="btn btn-primary btn-spinner btn-sm pull-right m-b-0" href="{{ url('admin/books/create') }}" role="button"><i class="fa fa-plus"></i>&nbsp; {{ trans('admin.book.actions.create') }}</a>
+                        <i class="fa fa-align-justify"></i> {{ trans('admin.transaction.actions.index') }}
+                        <a class="btn btn-primary btn-spinner btn-sm pull-right m-b-0" href="{{ url('admin/transactions/create') }}" role="button"><i class="fa fa-plus"></i>&nbsp; {{ trans('admin.transaction.actions.create') }}</a>
                     </div>
                     <div class="card-body" v-cloak>
                         <div class="card-block">
@@ -30,7 +30,7 @@
                                     </div>
                                     <div class="col-sm-auto form-group ">
                                         <select class="form-control" v-model="pagination.state.per_page">
-                                            
+
                                             <option value="10">10</option>
                                             <option value="25">25</option>
                                             <option value="100">100</option>
@@ -49,23 +49,21 @@
                                             </label>
                                         </th>
 
-                                        <th is='sortable' :column="'id'">{{ trans('admin.book.columns.id') }}</th>
-                                        <th is='sortable' :column="'title'">{{ trans('admin.book.columns.title') }}</th>
-                                        <th is='sortable' :column="'author'">{{ trans('admin.book.columns.author') }}</th>
-                                        <th is='sortable' :column="'price'">{{ trans('admin.book.columns.price') }}</th>
-                                        <th is='sortable' :column="'count'">{{ trans('admin.book.columns.count') }}</th>
-                                        <th is='sortable' :column="'rack_no'">{{ trans('admin.book.columns.rack_no') }}</th>
-                                        <th is='sortable' :column="'edition'">{{ trans('admin.book.columns.edition') }}</th>
+                                        <th is='sortable' :column="'id'">{{ trans('admin.transaction.columns.id') }}</th>
+                                        <th is='sortable' :column="'book_id'">{{ trans('admin.transaction.columns.book_id') }}</th>
+                                        <th is='sortable' :column="'members_id'">{{ trans('admin.transaction.columns.member_id') }}</th>
+                                        <th is='sortable' :column="'admin_user_id'">{{ trans('admin.transaction.columns.admin_user_id') }}</th>
+                                        <th is='sortable' :column="'expiry'">{{ trans('admin.transaction.columns.expiry') }}</th>
 
                                         <th></th>
                                     </tr>
                                     <tr v-show="(clickedBulkItemsCount > 0) || isClickedAll">
-                                        <td class="bg-bulk-info d-table-cell text-center" colspan="9">
-                                            <span class="align-middle font-weight-light text-dark">{{ trans('brackets/admin-ui::admin.listing.selected_items') }} @{{ clickedBulkItemsCount }}.  <a href="#" class="text-primary" @click="onBulkItemsClickedAll('/admin/books')" v-if="(clickedBulkItemsCount < pagination.state.total)"> <i class="fa" :class="bulkCheckingAllLoader ? 'fa-spinner' : ''"></i> {{ trans('brackets/admin-ui::admin.listing.check_all_items') }} @{{ pagination.state.total }}</a> <span class="text-primary">|</span> <a
+                                        <td class="bg-bulk-info d-table-cell text-center" colspan="7">
+                                            <span class="align-middle font-weight-light text-dark">{{ trans('brackets/admin-ui::admin.listing.selected_items') }} @{{ clickedBulkItemsCount }}.  <a href="#" class="text-primary" @click="onBulkItemsClickedAll('/admin/transactions')" v-if="(clickedBulkItemsCount < pagination.state.total)"> <i class="fa" :class="bulkCheckingAllLoader ? 'fa-spinner' : ''"></i> {{ trans('brackets/admin-ui::admin.listing.check_all_items') }} @{{ pagination.state.total }}</a> <span class="text-primary">|</span> <a
                                                         href="#" class="text-primary" @click="onBulkItemsClickedAllUncheck()">{{ trans('brackets/admin-ui::admin.listing.uncheck_all_items') }}</a>  </span>
 
                                             <span class="pull-right pr-2">
-                                                <button class="btn btn-sm btn-danger pr-3 pl-3" @click="bulkDelete('/admin/books/bulk-destroy')">{{ trans('brackets/admin-ui::admin.btn.delete') }}</button>
+                                                <button class="btn btn-sm btn-danger pr-3 pl-3" @click="bulkDelete('/admin/transactions/bulk-destroy')">{{ trans('brackets/admin-ui::admin.btn.delete') }}</button>
                                             </span>
 
                                         </td>
@@ -80,13 +78,11 @@
                                         </td>
 
                                     <td>@{{ item.id }}</td>
-                                        <td>@{{ item.title }}</td>
-                                        <td>@{{ item.author }}</td>
-                                        <td>@{{ item.price }}</td>
-                                        <td>@{{ item.count }}</td>
-                                        <td>@{{ item.rack_no }}</td>
-                                        <td>@{{ item.edition }}</td>
-                                        
+                                        <td>@{{ item.book_id }}</td>
+                                        <td>@{{ item.member_id }}</td>
+                                        <td>@{{ item.admin_user_id }}</td>
+                                        <td>@{{ item.expiry | date }}</td>
+
                                         <td>
                                             <div class="row no-gutters">
                                                 <div class="col-auto">
@@ -114,13 +110,13 @@
                                 <i class="icon-magnifier"></i>
                                 <h3>{{ trans('brackets/admin-ui::admin.index.no_items') }}</h3>
                                 <p>{{ trans('brackets/admin-ui::admin.index.try_changing_items') }}</p>
-                                <a class="btn btn-primary btn-spinner" href="{{ url('admin/books/create') }}" role="button"><i class="fa fa-plus"></i>&nbsp; {{ trans('admin.book.actions.create') }}</a>
+                                <a class="btn btn-primary btn-spinner" href="{{ url('admin/transactions/create') }}" role="button"><i class="fa fa-plus"></i>&nbsp; {{ trans('admin.transaction.actions.create') }}</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </book-listing>
+    </transaction-listing>
 
 @endsection

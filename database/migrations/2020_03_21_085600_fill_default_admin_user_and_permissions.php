@@ -74,6 +74,59 @@ class FillDefaultAdminUserAndPermissions extends Migration
             // ability to upload
             'admin.upload',
 
+            // manage books
+            'admin.book',
+            'admin.book.index',
+            'admin.book.create',
+            'admin.book.show',
+            'admin.book.edit',
+            'admin.book.delete',
+            'admin.book.bulk-delete',
+
+            // manage members
+            'admin.member',
+            'admin.member.index',
+            'admin.member.create',
+            'admin.member.show',
+            'admin.member.edit',
+            'admin.member.delete',
+            'admin.member.bulk-delete',
+
+            // manage transactions
+            'admin.transaction',
+            'admin.transaction.index',
+            'admin.transaction.create',
+            'admin.transaction.show',
+            'admin.transaction.edit',
+            'admin.transaction.delete',
+            'admin.transaction.bulk-delete',
+
+            //ability to impersonal login
+            'admin.admin-user.impersonal-login'
+        ]);
+
+        $defaultLibrarianPermissions = collect([
+            // view admin as a whole
+            'admin',
+
+            // manage books
+            'admin.book',
+            'admin.book.index',
+            'admin.book.show',
+
+            // manage members
+            'admin.member',
+            'admin.member.index',
+            'admin.member.show',
+
+            // manage transactions
+            'admin.transaction',
+            'admin.transaction.index',
+            'admin.transaction.create',
+            'admin.transaction.show',
+            'admin.transaction.edit',
+            'admin.transaction.delete',
+
             //ability to impersonal login
             'admin.admin-user.impersonal-login'
         ]);
@@ -97,6 +150,15 @@ class FillDefaultAdminUserAndPermissions extends Migration
                 'updated_at' => Carbon::now(),
                 'permissions' => $defaultPermissions->reject(function ($permission) {
                     return $permission === 'admin.admin-user.impersonal-login';
+                }),
+            ],
+            [
+                'name' => 'Librarian',
+                'guard_name' => $this->guardName,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+                'permissions' => $defaultLibrarianPermissions->reject(function ($permission) {
+                    return $permission === 'librarian.librarian-user.impersonal-login';
                 }),
             ],
         ];

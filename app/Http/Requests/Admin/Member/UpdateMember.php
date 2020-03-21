@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Admin\Book;
+namespace App\Http\Requests\Admin\Member;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 
-class UpdateBook extends FormRequest
+class UpdateMember extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -15,7 +15,7 @@ class UpdateBook extends FormRequest
      */
     public function authorize(): bool
     {
-        return Gate::allows('admin.book.edit', $this->book);
+        return Gate::allows('admin.member.edit', $this->member);
     }
 
     /**
@@ -26,12 +26,13 @@ class UpdateBook extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['sometimes', 'string'],
-            'author' => ['sometimes', 'string'],
-            'price' => ['nullable', 'numeric'],
-            'count' => ['sometimes', 'string'],
-            'rack_no' => ['nullable', 'string'],
-            'edition' => ['nullable', 'string'],
+            'type' => ['sometimes', 'string'],
+            'name' => ['sometimes', 'string'],
+            'phone' => ['sometimes', 'string'],
+            'email' => ['nullable', 'email', 'string'],
+            'address_l1' => ['sometimes', 'string'],
+            'address_l2' => ['nullable', 'string'],
+            'expiry' => ['sometimes', 'date'],
             
         ];
     }

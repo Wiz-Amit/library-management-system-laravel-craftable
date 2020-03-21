@@ -4,20 +4,19 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Book extends Model
+class Transaction extends Model
 {
     protected $fillable = [
-        'title',
-        'author',
-        'price',
-        'count',
-        'rack_no',
-        'edition',
+        'book_id',
+        'member_id',
+        'admin_user_id',
+        'expiry',
 
     ];
 
 
     protected $dates = [
+        'expiry',
         'created_at',
         'updated_at',
 
@@ -29,6 +28,16 @@ class Book extends Model
 
     public function getResourceUrlAttribute()
     {
-        return url('/admin/books/'.$this->getKey());
+        return url('/admin/transactions/'.$this->getKey());
+    }
+
+    public function book()
+    {
+        return $this->hasOne(Book::Class);
+    }
+
+    public function member()
+    {
+        return $this->hasOne(Member::Class);
     }
 }
