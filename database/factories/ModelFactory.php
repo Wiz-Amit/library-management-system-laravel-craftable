@@ -16,4 +16,18 @@ $factory->define(Brackets\AdminAuth\Models\AdminUser::class, function (Faker\Gen
         'updated_at' => $faker->dateTime,
         
     ];
+});/** @var  \Illuminate\Database\Eloquent\Factory $factory */
+$factory->define(App\Models\Book::class, static function (Faker\Generator $faker) {
+    return [
+        'title' => $faker->sentence,
+        'author' => $faker->sentence,
+        'price' => $faker->randomNumber(5),
+        'rack_no' => $faker->sentence,
+        'edition' => $faker->sentence,
+        'count' => $faker->sentence,
+        'created_at' => $faker->dateTime,
+        'updated_at' => $faker->dateTime,
+        
+        
+    ];
 });

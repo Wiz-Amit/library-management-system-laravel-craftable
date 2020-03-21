@@ -29,5 +29,26 @@ return [
         ],
     ],
 
+    'book' => [
+        'title' => 'Books',
+
+        'actions' => [
+            'index' => 'Books',
+            'create' => 'New Book',
+            'edit' => 'Edit :name',
+        ],
+
+        'columns' => [
+            'id' => 'ID',
+            'title' => 'Title',
+            'author' => 'Author',
+            'price' => 'Price',
+            'rack_no' => 'Rack no',
+            'edition' => 'Edition',
+            'count' => 'Count',
+            
+        ],
+    ],
+
     // Do not delete me :) I'm used for auto-generation
 ];
