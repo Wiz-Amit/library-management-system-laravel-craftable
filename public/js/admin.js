@@ -112826,8 +112826,8 @@ Vue.component('transaction-form', {
   data: function data() {
     return {
       form: {
-        book_id: '',
-        member_id: '',
+        book: '',
+        member: '',
         admin_user_id: '',
         expiry: ''
       }
@@ -112848,8 +112848,38 @@ Vue.component('transaction-form', {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _app_components_Listing_AppListing__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../app-components/Listing/AppListing */ "./resources/js/admin/app-components/Listing/AppListing.js");
 
-Vue.component('transaction-listing', {
-  mixins: [_app_components_Listing_AppListing__WEBPACK_IMPORTED_MODULE_0__["default"]]
+Vue.component("transaction-listing", {
+  mixins: [_app_components_Listing_AppListing__WEBPACK_IMPORTED_MODULE_0__["default"]],
+  data: function data() {
+    return {
+      showBooksFilter: false,
+      showMembersFilter: false,
+      filters: {
+        books: [],
+        members: []
+      }
+    };
+  },
+  watch: {
+    showBooksFilter: function showBooksFilter(newVal, oldVal) {
+      this.booksMultiselect = [];
+    },
+    booksMultiselect: function booksMultiselect(newVal, oldVal) {
+      this.filters.books = newVal.map(function (object) {
+        return object["key"];
+      });
+      this.filter("books", this.filters.books);
+    },
+    showMembersFilter: function showMembersFilter(newVal, oldVal) {
+      this.membersMultiselect = [];
+    },
+    membersMultiselect: function membersMultiselect(newVal, oldVal) {
+      this.filters.members = newVal.map(function (object) {
+        return object["key"];
+      });
+      this.filter("members", this.filters.members);
+    }
+  }
 });
 
 /***/ }),

@@ -43,7 +43,24 @@ class TransactionsController extends Controller
             ['id', 'book_id', 'member_id', 'admin_user_id', 'expiry'],
 
             // set columns to searchIn
-            ['id']
+            ['id'],
+
+            function ($query) use ($request) {
+                $query->with(['book', 'member', 'admin_user']);
+                if($request->has('books')){
+                    $query->whereIn('book_id', $request->get('books'));
+                }
+                if($request->has('members')){
+                    $query->whereIn('member_id', $request->get('members'));
+                }
+            }
+
+            // function ($query) use ($request) {
+            //     $query->with(['member']);
+            //     if($request->has('members')){
+            //         $query->whereIn('member_id', $request->get('members'));
+            //     }
+            // }
         );
 
         if ($request->ajax()) {
@@ -56,22 +73,22 @@ class TransactionsController extends Controller
         }
 
         // translate data
-        foreach ($data as $row) {
-            // book name
-            $book = Book::findOrFail($row->book_id);
-            $row->book_id = $book->title;
+        // foreach ($data as $row) {
+        //     // book name
+        //     $book = Book::findOrFail($row->book_id);
+        //     $row->book_id = $book->title;
 
-            // memeber name
-            $member = Member::findOrFail($row->member_id);
-            $row->member_id = $member->name;
+        //     // memeber name
+        //     $member = Member::findOrFail($row->member_id);
+        //     $row->member_id = $member->name;
 
-            // issuer name
-            $issuer = AdminUser::findOrFail($row->admin_user_id);
-            // dd($issuer);
-            $row->admin_user_id = $issuer->first_name." (".$issuer->id.")";
-        }
+        //     // issuer name
+        //     $issuer = AdminUser::findOrFail($row->admin_user_id);
+        //     // dd($issuer);
+        //     $row->admin_user_id = $issuer->first_name." (".$issuer->id.")";
+        // }
 
-        return view('admin.transaction.index', ['data' => $data]);
+        return view('admin.transaction.index', ['data' => $data, 'members' => Member::all(), 'books' => Book::all()]);
     }
 
     /**
@@ -84,7 +101,7 @@ class TransactionsController extends Controller
     {
         $this->authorize('admin.transaction.create');
 
-        return view('admin.transaction.create');
+        return view('admin.transaction.create', ['books' => Book::all(), 'members' => Member::all()]);
     }
 
     /**
@@ -97,6 +114,8 @@ class TransactionsController extends Controller
     {
         // Sanitize input
         $sanitized = $request->getSanitized();
+        $sanitized['book_id'] = $request->getBookId();
+        $sanitized['member_id'] = $request->getMemberId();
 
         // Store the Transaction
         $transaction = Transaction::create($sanitized);
@@ -133,9 +152,10 @@ class TransactionsController extends Controller
     {
         $this->authorize('admin.transaction.edit', $transaction);
 
-
         return view('admin.transaction.edit', [
             'transaction' => $transaction,
+            'books' => Book::all(),
+            'members' => Member::all(),
         ]);
     }
 
@@ -150,6 +170,8 @@ class TransactionsController extends Controller
     {
         // Sanitize input
         $sanitized = $request->getSanitized();
+        $sanitized['book_id'] = $request->getBookId() ? $request->getBookId() : $request->book_id;
+        $sanitized['member_id'] = $request->getMemberId() ? $request->getMemberId() : $request->member_id;
 
         // Update changed values Transaction
         $transaction->update($sanitized);

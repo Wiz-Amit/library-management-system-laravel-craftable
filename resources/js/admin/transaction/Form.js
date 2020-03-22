@@ -5,11 +5,11 @@ Vue.component('transaction-form', {
     data: function() {
         return {
             form: {
-                book_id:  '' ,
-                member_id:  '' ,
+                book:  '' ,
+                member:  '' ,
                 admin_user_id:  '' ,
                 expiry:  '' ,
-                
+
             }
         }
     }

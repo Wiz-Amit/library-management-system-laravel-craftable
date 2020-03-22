@@ -26,11 +26,11 @@ class UpdateTransaction extends FormRequest
     public function rules(): array
     {
         return [
-            'book_id' => ['sometimes', 'string'],
-            'member_id' => ['sometimes', 'string'],
-            'admin_user_id' => ['sometimes', 'string'],
+            'book' => ['sometimes'],
+            'member' => ['sometimes'],
+            'admin_user_id' => ['sometimes', 'integer'],
             'expiry' => ['sometimes', 'date'],
-            
+
         ];
     }
 
@@ -47,5 +47,19 @@ class UpdateTransaction extends FormRequest
         //Add your code for manipulation with request data here
 
         return $sanitized;
+    }
+
+    public function getBookId(){
+        if ($this->has('book')){
+            return $this->get('book')['id'];
+        }
+        return null;
+    }
+
+    public function getMemberId(){
+        if ($this->has('member')){
+            return $this->get('member')['id'];
+        }
+        return null;
     }
 }

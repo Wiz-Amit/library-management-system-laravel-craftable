@@ -26,11 +26,10 @@ class StoreTransaction extends FormRequest
     public function rules(): array
     {
         return [
-            'book_id' => ['required', 'string'],
-            'member_id' => ['required', 'string'],
-            'admin_user_id' => ['required', 'string'],
+            'book' => ['required'],
+            'member' => ['required'],
+            'admin_user_id' => ['required'],
             'expiry' => ['required', 'date'],
-            
         ];
     }
 
@@ -46,5 +45,19 @@ class StoreTransaction extends FormRequest
         //Add your code for manipulation with request data here
 
         return $sanitized;
+    }
+
+    public function getBookId(){
+        if ($this->has('book')){
+            return $this->get('book')['id'];
+        }
+        return null;
+    }
+
+    public function getMemberId(){
+        if ($this->has('member')){
+            return $this->get('member')['id'];
+        }
+        return null;
     }
 }

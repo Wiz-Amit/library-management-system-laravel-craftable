@@ -1,23 +1,67 @@
-<div class="form-group row align-items-center" :class="{'has-danger': errors.has('book_id'), 'has-success': fields.book_id && fields.book_id.valid }">
+{{-- <div class="form-group row align-items-center" :class="{'has-danger': errors.has('book_id'), 'has-success': fields.book_id && fields.book_id.valid }">
     <label for="book_id" class="col-form-label text-md-right" :class="isFormLocalized ? 'col-md-4' : 'col-md-2'">{{ trans('admin.transaction.columns.book_id') }}</label>
         <div :class="isFormLocalized ? 'col-md-4' : 'col-md-9 col-xl-8'">
         <input type="text" v-model="form.book_id" v-validate="'required'" @input="validate($event)" class="form-control" :class="{'form-control-danger': errors.has('book_id'), 'form-control-success': fields.book_id && fields.book_id.valid}" id="book_id" name="book_id" placeholder="{{ trans('admin.transaction.columns.book_id') }}">
         <div v-if="errors.has('book_id')" class="form-control-feedback form-text" v-cloak>@{{ errors.first('book_id') }}</div>
     </div>
+</div> --}}
+
+<div class="form-group row align-items-center"
+     :class="{'has-danger': errors.has('book_id'), 'has-success': this.fields.book_id && this.fields.book_id.valid }">
+    <label for="book_id"
+           class="col-form-label text-md-right" :class="isFormLocalized ? 'col-md-4' : 'col-md-2'">{{ trans('admin.transaction.columns.book_id') }}</label>
+    <div :class="isFormLocalized ? 'col-md-4' : 'col-md-9 col-xl-8'">
+
+        <multiselect
+            v-model="form.book"
+            :options="{{$books->toJson()}}"
+            :multiple="false"
+            track-by="id"
+            label="title"
+            tag-placeholder="{{ __('Select Book') }}"
+            placeholder="{{ __('Book') }}">
+        </multiselect>
+
+        <div v-if="errors.has('book_id')" class="form-control-feedback form-text" v-cloak>@{{
+            errors.first('book_id') }}
+        </div>
+    </div>
 </div>
 
-<div class="form-group row align-items-center" :class="{'has-danger': errors.has('member_id'), 'has-success': fields.member_id && fields.member_id.valid }">
+<div class="form-group row align-items-center"
+     :class="{'has-danger': errors.has('member_id'), 'has-success': this.fields.member_id && this.fields.member_id.valid }">
+    <label for="member_id"
+           class="col-form-label text-md-right" :class="isFormLocalized ? 'col-md-4' : 'col-md-2'">{{ trans('admin.transaction.columns.book_id') }}</label>
+    <div :class="isFormLocalized ? 'col-md-4' : 'col-md-9 col-xl-8'">
+
+        <multiselect
+            v-model="form.member"
+            :options="{{$members->toJson()}}"
+            :multiple="false"
+            track-by="id"
+            label="name"
+            tag-placeholder="{{ __('Select Member') }}"
+            placeholder="{{ __('Member') }}">
+        </multiselect>
+
+        <div v-if="errors.has('member_id')" class="form-control-feedback form-text" v-cloak>@{{
+            errors.first('member_id') }}
+        </div>
+    </div>
+</div>
+
+{{-- <div class="form-group row align-items-center" :class="{'has-danger': errors.has('member_id'), 'has-success': fields.member_id && fields.member_id.valid }">
     <label for="member_id" class="col-form-label text-md-right" :class="isFormLocalized ? 'col-md-4' : 'col-md-2'">{{ trans('admin.transaction.columns.member_id') }}</label>
         <div :class="isFormLocalized ? 'col-md-4' : 'col-md-9 col-xl-8'">
         <input type="text" v-model="form.member_id" v-validate="'required'" @input="validate($event)" class="form-control" :class="{'form-control-danger': errors.has('member_id'), 'form-control-success': fields.member_id && fields.member_id.valid}" id="member_id" name="member_id" placeholder="{{ trans('admin.transaction.columns.member_id') }}">
         <div v-if="errors.has('member_id')" class="form-control-feedback form-text" v-cloak>@{{ errors.first('member_id') }}</div>
     </div>
-</div>
+</div> --}}
 
-<div class="form-group row align-items-center" :class="{'has-danger': errors.has('admin_user_id'), 'has-success': fields.admin_user_id && fields.admin_user_id.valid }">
+<div class="form-group row align-items-center sr-only" :class="{'has-danger': errors.has('admin_user_id'), 'has-success': fields.admin_user_id && fields.admin_user_id.valid }">
     <label for="admin_user_id" class="col-form-label text-md-right" :class="isFormLocalized ? 'col-md-4' : 'col-md-2'">{{ trans('admin.transaction.columns.admin_user_id') }}</label>
         <div :class="isFormLocalized ? 'col-md-4' : 'col-md-9 col-xl-8'">
-        <input type="text" v-model="form.admin_user_id" v-validate="'required'" @input="validate($event)" class="form-control" :class="{'form-control-danger': errors.has('admin_user_id'), 'form-control-success': fields.admin_user_id && fields.admin_user_id.valid}" id="admin_user_id" name="admin_user_id" placeholder="{{ trans('admin.transaction.columns.admin_user_id') }}">
+        <input type="text" v-model="form.admin_user_id = {{Auth::user()->id}}" v-validate="'required'" @input="validate($event)" class="form-control" :class="{'form-control-danger': errors.has('admin_user_id'), 'form-control-success': fields.admin_user_id && fields.admin_user_id.valid}" id="admin_user_id" name="admin_user_id" placeholder="{{ trans('admin.transaction.columns.admin_user_id') }}">
         <div v-if="errors.has('admin_user_id')" class="form-control-feedback form-text" v-cloak>@{{ errors.first('admin_user_id') }}</div>
     </div>
 </div>

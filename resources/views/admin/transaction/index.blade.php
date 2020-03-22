@@ -52,7 +52,7 @@
                                         <th is='sortable' :column="'id'">{{ trans('admin.transaction.columns.id') }}</th>
                                         <th is='sortable' :column="'book_id'">{{ trans('admin.transaction.columns.book_id') }}</th>
                                         <th is='sortable' :column="'members_id'">{{ trans('admin.transaction.columns.member_id') }}</th>
-                                        <th is='sortable' :column="'admin_user_id'">{{ trans('admin.transaction.columns.admin_user_id') }}</th>
+                                        <th is='sortable' :column="'admin_user_id'">Issuer</th>
                                         <th is='sortable' :column="'expiry'">{{ trans('admin.transaction.columns.expiry') }}</th>
 
                                         <th></th>
@@ -78,9 +78,9 @@
                                         </td>
 
                                     <td>@{{ item.id }}</td>
-                                        <td>@{{ item.book_id }}</td>
-                                        <td>@{{ item.member_id }}</td>
-                                        <td>@{{ item.admin_user_id }}</td>
+                                        <td>@{{ item.book.title }}</td>
+                                        <td>@{{ item.member.name }}</td>
+                                        <td>@{{ item.admin_user.first_name }}: @{{ item.admin_user.id }}</td>
                                         <td>@{{ item.expiry | date }}</td>
 
                                         <td>

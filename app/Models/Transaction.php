@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Brackets\AdminAuth\Models\AdminUser;
 
 class Transaction extends Model
 {
@@ -33,11 +34,16 @@ class Transaction extends Model
 
     public function book()
     {
-        return $this->hasOne(Book::Class);
+        return $this->belongsTo(Book::Class);
     }
 
     public function member()
     {
-        return $this->hasOne(Member::Class);
+        return $this->belongsTo(Member::Class);
+    }
+
+    public function admin_user()
+    {
+        return $this->belongsTo(AdminUser::Class);
     }
 }
